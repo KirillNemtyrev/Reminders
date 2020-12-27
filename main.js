@@ -168,7 +168,8 @@ bot.event('message_new', async (ctx) => {
         }
         else if (user.Flag == 2) // Проверка на флаг = 2
         {
-            var date = new Date().toLocaleString('en-US', { timeZone: 'Europe/Moscow' }); // Переменная для получения даты
+            var date = new Date().toLocaleString("en-US", {timeZone: "Europe/Moscow"}); // Переменная для получения даты
+            date = new Date(date); // Переменная для получения даты
             let day, month, year, hour, minute, textDate, textTime
             const args = ctx.message.text.split(/ +/g); // Разделение сообщения через split
 
@@ -342,7 +343,8 @@ bot.event('message_new', async (ctx) => {
 
 async function SendReminderMessage()
 {
-    var date = new Date().toLocaleString('en-US', { timeZone: 'Europe/Moscow' }); // Переменная для получения даты
+    var date = new Date().toLocaleString("en-US", {timeZone: "Europe/Moscow"}); // Переменная для получения даты
+    date = new Date(date); // Переменная для получения даты
     const iHour = date.getHours(); // Константа: Присваивания часа
     const iMinute = date.getMinutes(); // Константа: Присваивания минут
     const iMonth = date.getMonth() + 1; // Константа: Присваивания сегодняшнего месяца
