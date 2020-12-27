@@ -4,6 +4,7 @@
   "description": "",
   "main": "main.js",
   "dependencies": {
+    "dotenv": "^8.2.0",
     "moment": "^2.29.1",
     "mongoose": "^5.11.8",
     "node-vk-bot-api": "^3.3.7"

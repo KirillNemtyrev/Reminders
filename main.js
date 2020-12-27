@@ -1,6 +1,7 @@
 const VkBot = require('node-vk-bot-api'); // Основа
 const api = require('node-vk-bot-api/lib/api'); // Библиотека для получения имени в ВК
 const moment = require('moment'); // Для получения даты
+require('dotenv').config();
 const token = process.env.TOKEN // Токен группы
 const bot = new VkBot(token); // Авторизация в вк
 const mongoose = require("mongoose"); // Модуль mongoose
@@ -172,25 +173,24 @@ bot.event('message_new', async (ctx) => {
             let day, month, year, hour, minute, textDate, textTime
             const args = ctx.message.text.split(/ +/g); // Разделение сообщения через split
 
-            const data = moment().zone("+03:00").format('D-M-YYYY-H-m'); // Получение даты
-            const setDate = data.split('-'); // Разделенеи через -
-            const iHour = parseInt(setDate[3]); // Константа: Присваивания часа
-            const iMinute = parseInt(setDate[4]); // Константа: Присваивания минут
-            const iMonth = parseInt(setDate[1]); // Константа: Присваивания сегодняшнего месяца
-            const iDay = parseInt(setDate[0]); // Константа: Присваивания сегодняшнего дня 
-            const iYear = parseInt(setDate[2]); // Константа: Присваивания сегодняшнего года
+            const data = moment().utcOffset("+03:00").toObject(); // Получение даты
+            const iHour = data.hours // Константа: Присваивания часа
+            const iMinute = data.minutes; // Константа: Присваивания минут
+            const iMonth = data.months + 1; // Константа: Присваивания сегодняшнего месяца
+            const iDay = data.date; // Константа: Присваивания сегодняшнего дня 
+            const iYear = data.years; // Константа: Присваивания сегодняшнего года
 
             if (args[0].toLowerCase() == 'сегодня' || args[0].toLowerCase() == 'седня') // Проверка на ввода через через lower
             {
-                year = date.getFullYear(); // Присваивания сегодняшнего года
-                month = date.getMonth() + 1; // Присваивания сегодняшнего месяца, + 1 т.к вывод мес в js начинается с 0
-                day = date.getDate(); // Присваивания сегодняшнего дня
+                year = iYear; // Присваивания сегодняшнего года
+                month = iMonth; // Присваивания сегодняшнего месяца
+                day = iDay; // Присваивания сегодняшнего дня
             }
             else if (args[0].toLowerCase() == 'завтра' || args[0].toLowerCase() == 'зт') // Проверка на ввода через через lower
             {
-                year = date.getFullYear(); // Присваивания сегодняшнего года
-                month = date.getMonth() + 1; // Присваивания сегодняшнего месяца, + 1 т.к вывод мес в js начинается с 0
-                day = date.getDate() + 1; // Присваивания завтрашнего дня
+                year = iYear; // Присваивания сегодняшнего года
+                month = iMonth; // Присваивания сегодняшнего месяца
+                day = iDay + 1; // Присваивания завтрашнего дня
                 if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) // Проверка на месяцы
                 {
                     if (day > 31) // Больше ли 31 дня?
@@ -273,7 +273,7 @@ bot.event('message_new', async (ctx) => {
                 else if(iYear == Number(splitDate[2]) && iMonth > Number(splitDate[1])) // Проверка прошедшее время
                     return await ctx.reply('🤖 Хм.. у тебя тут ошибка:\n\
                                  Я не могу работать в прошлом, месяц ввел неправильно') // Ответное сообщение и прекращение функции 
-                else if(iYear == Number(splitDate[2]) && iMonth == Number(splitDate[1]) && iDay > Number(splitDate[1])) // Проверка прошедшее время
+                else if(iYear == Number(splitDate[2]) && iMonth == Number(splitDate[1]) && iDay > Number(splitDate[0])) // Проверка прошедшее время
                     return await ctx.reply('🤖 Хм.. у тебя тут ошибка:\n\
                              Я не могу работать в прошлом, день ввел неправильно') // Ответное сообщение и прекращение функции 
                 else // Если проблем не обнаружено, то
@@ -287,7 +287,7 @@ bot.event('message_new', async (ctx) => {
             if(!args[1]) // Проверка на ввод времени
                 return await ctx.reply('🤖 Я не ванга, я незнаю во сколько тебе нужно напомнить\nПопробуй еще раз..')
             // Проверка на ввод аргумента без указания минут
-            if(Number(args[1]) >= 0 && Number(args[1]) <= 23) // Number(аргумент) -> перевод в число
+            if((Number(args[1]) >= 0 && Number(args[1]) <= 23) && iHour > Number(args[1])) // Number(аргумент) -> перевод в число
             {
                 hour = Number(args[1]); // Присвоение часа
                 minute = 0; // Присвоение минут
@@ -327,7 +327,7 @@ bot.event('message_new', async (ctx) => {
             else return await ctx.reply('🤖 Хмм.. это не ответ\nМне нужно знать, повторять тебе или нет?\nДа или Нет?') // В случае левого сообщения
             await RegisterReminder(user.Numbers + 1, ctx.message.from_id, user.Text, user.Date, user.Time, iRepeat); // Создание напоминания
             // Обнуление аккаунта
-            await User.findOneAndUpdate({ID: ctx.message.from_id},{ Flag: 0, Date: 'None', Time: 'None', Text: 'None', Numbers: user.Number + 1 }).exec(); 
+            await User.findOneAndUpdate({ID: ctx.message.from_id},{ Flag: 0, Date: 'None', Time: 'None', Text: 'None', Numbers: user.Numbers + 1 }).exec(); 
             if (iRepeat == 1) messageRepeat = 'Да'; // Проверка: если с повторением, сообщение = да
             else messageRepeat = 'Нет'; // Проверка: если без повторения, сообщение = нет
             const splitTime = user.Time.split(':'); // split через :
@@ -354,13 +354,12 @@ bot.event('message_new', async (ctx) => {
 
 async function SendReminderMessage()
 {
-    const data = moment().zone("+03:00").format('D-M-YYYY-H-m'); // Получение даты
-    const setDate = data.split('-'); // Разделенеи через -
-    const iHour = parseInt(setDate[3]); // Константа: Присваивания часа
-    const iMinute = parseInt(setDate[4]); // Константа: Присваивания минут
-    const iMonth = parseInt(setDate[1]); // Константа: Присваивания сегодняшнего месяца
-    const iDay = parseInt(setDate[0]); // Константа: Присваивания сегодняшнего дня 
-    const iYear = parseInt(setDate[2]); // Константа: Присваивания сегодняшнего года
+    const data = moment().utcOffset("+03:00").toObject(); // Получение даты
+    const iHour = data.hours // Константа: Присваивания часа
+    const iMinute = data.minutes; // Константа: Присваивания минут
+    const iMonth = data.months + 1; // Константа: Присваивания сегодняшнего месяца
+    const iDay = data.date; // Константа: Присваивания сегодняшнего дня 
+    const iYear = data.years; // Константа: Присваивания сегодняшнего года
 
     let stringTime = `${iHour}:${iMinute}`; // Время в строке
     let stringDate = `${iDay}.${iMonth}.${iYear}` // Дата в строке
@@ -414,7 +413,7 @@ async function SendReminderMessage()
             messageRepeat = `Напоминание перенесенно на ${oDay}.${oMonth}.${oYear}`;
         }
         else await Reminder.deleteOne({UserID: reminder.UserID, ID: reminder.ID}).exec() // удаление напоминание
-        const data = await api('users.get', {user_ids: ctx.message.from_id,access_token: token}); // Получение имени через модуль
+        const data = await api('users.get', {user_ids: reminder.UserID,access_token: token}); // Получение имени через модуль
         await bot.sendMessage(reminder.UserID, `[id${ctx.message.from_id}|${data.response[0].first_name}], Напоминание #${reminder.ID}\n${reminder.Text}\n\n${messageRepeat}`); // Отправка сообщения
     }
 }
@@ -422,4 +421,4 @@ async function SendReminderMessage()
 // ===============[Запуск бота]==============
 bot.startPolling(); 
 // ===============[Запуск интервала проверки напоминания]==============
-setInterval(SendReminderMessage, 30000)
+setInterval(SendReminderMessage, 30000);
