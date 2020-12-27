@@ -423,4 +423,4 @@ async function SendReminderMessage()
 bot.startPolling(); 
 // ===============[Запуск интервала проверки напоминания]==============
 //setInterval(SendReminderMessage, 30000)
-console.log(moment().zone("+03:00"));
+console.log(moment().zone("+03:00").format('D-MYYYY-H-m'));
