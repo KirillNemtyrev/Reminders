@@ -6,7 +6,7 @@ const bot = new VkBot(token); // Авторизация в вк
 const mongoose = require("mongoose"); // Модуль mongoose
 const Schema = mongoose.Schema; // Создание схемы
 // Подключение к mongoose
-mongoose.connect("mongodb+srv://gangstar3857:gangstar3857@lamborghini.67bfv.mongodb.net/reminders?retryWrites=true&w=majority", { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false });
+mongoose.connect(process.env.URL, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false });
 
 // установка схемы
 // Схема пользователя
