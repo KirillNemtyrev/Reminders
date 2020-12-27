@@ -1,6 +1,6 @@
 const VkBot = require('node-vk-bot-api'); // Основа
 const api = require('node-vk-bot-api/lib/api'); // Библиотека для получения имени в ВК
-const moment = require('moment'); // Для получения даты
+require('moment'); // Для получения даты
 const token = process.env.TOKEN // Токен группы
 const bot = new VkBot(token); // Авторизация в вк
 const mongoose = require("mongoose"); // Модуль mongoose
