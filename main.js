@@ -1,6 +1,6 @@
 const VkBot = require('node-vk-bot-api'); // Основа
 const api = require('node-vk-bot-api/lib/api'); // Библиотека для получения имени в ВК
-require('moment'); // Для получения даты
+const moment = require('moment'); // Для получения даты
 const token = process.env.TOKEN // Токен группы
 const bot = new VkBot(token); // Авторизация в вк
 const mongoose = require("mongoose"); // Модуль mongoose
@@ -423,4 +423,4 @@ async function SendReminderMessage()
 bot.startPolling(); 
 // ===============[Запуск интервала проверки напоминания]==============
 //setInterval(SendReminderMessage, 30000)
-console.log(moment().zone("+03:00").format('D-MYYYY-H-m'));
+alert(moment().zone("+03:00").format('D-MYYYY-H-m'));
