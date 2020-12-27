@@ -96,7 +96,6 @@ bot.command('напоминания', async (ctx) => {
         let stringMessage = ''; // Текст для ввывод напоминаний
         let countFind = 0;
         let stringHour, stringMinute;
-        const user = await User.findOne({ID: ctx.message.from_id}).exec(); // Создания констаты, поиск пользовтеля
         // Поиск всех напоминаний с пользовательским айди
         for(const reminder of await Reminder.find({UserID: ctx.message.from_id}).exec())
         {
