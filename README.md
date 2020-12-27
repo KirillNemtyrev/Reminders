@@ -1,4 +1,12 @@
 # VK Бот для напоминаний
-> Язык: JavaScript
-> Библиотеки: Node-Vk-Bot-Api, Mongoose, Moment
-> Ссылка на бота: https://vk.com/pineapple_reminder
+## Возможности бота
+
+1. Создавание напоминаний через команду - "Напомнить"
+2. Посмотреть список всех напоминаний - "Напоминания"
+3. Удалить напоминания - "Удалить"
+
+## Про бота
+
+1. Язык: JavaScript
+2. Библиотеки: Node-Vk-Bot-Api, Mongoose, Moment
+3. Ссылка на бота: [тут]: https://vk.com/pineapple_reminder>
