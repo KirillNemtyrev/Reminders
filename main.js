@@ -1,5 +1,6 @@
 const VkBot = require('node-vk-bot-api'); // Основа
 const api = require('node-vk-bot-api/lib/api'); // Библиотека для получения имени в ВК
+const moment = require('moment'); // Для получения даты
 const token = process.env.TOKEN // Токен группы
 const bot = new VkBot(token); // Авторизация в вк
 const mongoose = require("mongoose"); // Модуль mongoose
@@ -96,7 +97,7 @@ bot.command('напоминания', async (ctx) => {
         let stringHour, stringMinute;
         const user = await User.findOne({ID: ctx.message.from_id}).exec(); // Создания констаты, поиск пользовтеля
         // Поиск всех напоминаний с пользовательским айди
-        for(const reminder of await Reminder.find({userID: ctx.message.from_id}).exec())
+        for(const reminder of await Reminder.find({UserID: ctx.message.from_id}).exec())
         {
             const splitTime = reminder.Time.split(':'); // Разделение сообщения через :
             if (Number(splitTime[0]) < 10) // Для красоты: Если часов мешньше 10
@@ -173,7 +174,7 @@ bot.event('message_new', async (ctx) => {
             let day, month, year, hour, minute, textDate, textTime
             const args = ctx.message.text.split(/ +/g); // Разделение сообщения через split
 
-            const iHour = date.getHours(); // Константа: Присваивания часа
+            const iHour = moment().zone("+03:00"); // Константа: Присваивания часа
             const iMinute = date.getMinutes(); // Константа: Присваивания минут
             const iMonth = date.getMonth() + 1; // Константа: Присваивания сегодняшнего месяца
             const iDay = date.getDate(); // Константа: Присваивания сегодняшнего дня 
@@ -320,18 +321,28 @@ bot.event('message_new', async (ctx) => {
         }
         else if(user.Flag == 3)
         {
-            let iRepeat = 0, messageRepeat;
+            let iRepeat = 0, messageRepeat, stringHour, stringMinute;
             if(ctx.message.text.toLowerCase() == 'да') iRepeat = 1; // повторять каждый день
             else if(ctx.message.text.toLowerCase() == 'нет') iRepeat = 0; // не повторять
             else return await ctx.reply('🤖 Хмм.. это не ответ\nМне нужно знать, повторять тебе или нет?\nДа или Нет?') // В случае левого сообщения
             await RegisterReminder(user.Numbers + 1, ctx.message.from_id, user.Text, user.Date, user.Time, iRepeat); // Создание напоминания
             // Обнуление аккаунта
-            await User.findOneAndUpdate({ID: ctx.message.from_id},{ Flag: 0, Date: 'None', Time: 'None', Text: 'None', Number: user.Number + 1 }).exec(); 
+            await User.findOneAndUpdate({ID: ctx.message.from_id},{ Flag: 0, Date: 'None', Time: 'None', Text: 'None', Numbers: user.Number + 1 }).exec(); 
             if (iRepeat == 1) messageRepeat = 'Да'; // Проверка: если с повторением, сообщение = да
             else messageRepeat = 'Нет'; // Проверка: если без повторения, сообщение = нет
+            const splitTime = user.Time.split(':'); // split через :
+            if (Number(splitTime[0]) < 10) // Для красоты: Если часов мешньше 10
+                stringHour = `0${Number(splitTime[0])}`
+            else
+                stringHour = `${Number(splitTime[0])}`
+
+            if (Number(splitTime[1]) < 10) // Для красоты: Если минут мешньше 10
+                stringMinute = `0${Number(splitTime[1])}`
+            else
+                stringMinute = `${Number(splitTime[1])}`
             await ctx.reply(`🤖 Напоминание #${user.Numbers + 1}, успешно созданно\n\
                     Дата: ${user.Date}\n\
-                    Время: ${user.Time}\n\
+                    Время: ${stringHour}:${stringMinute}\n\
                     Текст: ${user.Text}\n\
                     С повторением: ${messageRepeat}`)
         }
@@ -411,4 +422,5 @@ async function SendReminderMessage()
 // ===============[Запуск бота]==============
 bot.startPolling(); 
 // ===============[Запуск интервала проверки напоминания]==============
-setInterval(SendReminderMessage, 30000)
+//setInterval(SendReminderMessage, 30000)
+console.log(moment().zone("+03:00"));
