@@ -1,1 +1,1 @@
-start: node main.jss
+start: node main.js
