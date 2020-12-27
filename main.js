@@ -1,5 +1,4 @@
 const VkBot = require('node-vk-bot-api'); // Основа
-require('dotenv').config() // Модуль dotenv для heroku
 const api = require('node-vk-bot-api/lib/api'); // Библиотека для получения имени в ВК
 const token = process.env.TOKEN // Токен группы
 const bot = new VkBot(token); // Авторизация в вк

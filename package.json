@@ -1,0 +1,24 @@
+{
+  "name": "reminders",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "dependencies": {
+    "mongoose": "^5.11.8",
+    "node-vk-bot-api": "^3.3.7"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KirillNemtyrev/Reminders.git"
+  },
+  "author": "Kirill Nemtyrev",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/KirillNemtyrev/Reminders/issues"
+  },
+  "homepage": "https://github.com/KirillNemtyrev/Reminders#readme"
+}
