@@ -169,16 +169,16 @@ bot.event('message_new', async (ctx) => {
         }
         else if (user.Flag == 2) // Проверка на флаг = 2
         {
-            var date = new Date().toLocaleString("en-US", {timeZone: "Europe/Moscow"}); // Переменная для получения даты
-            date = new Date(date); // Переменная для получения даты
             let day, month, year, hour, minute, textDate, textTime
             const args = ctx.message.text.split(/ +/g); // Разделение сообщения через split
 
-            const iHour = moment().zone("+03:00"); // Константа: Присваивания часа
-            const iMinute = date.getMinutes(); // Константа: Присваивания минут
-            const iMonth = date.getMonth() + 1; // Константа: Присваивания сегодняшнего месяца
-            const iDay = date.getDate(); // Константа: Присваивания сегодняшнего дня 
-            const iYear = date.getFullYear(); // Константа: Присваивания сегодняшнего года
+            const data = moment().zone("+03:00").format('D-M-YYYY-H-m'); // Получение даты
+            const setDate = data.split('-'); // Разделенеи через -
+            const iHour = parseInt(setDate[3]); // Константа: Присваивания часа
+            const iMinute = parseInt(setDate[4]); // Константа: Присваивания минут
+            const iMonth = parseInt(setDate[1]); // Константа: Присваивания сегодняшнего месяца
+            const iDay = parseInt(setDate[0]); // Константа: Присваивания сегодняшнего дня 
+            const iYear = parseInt(setDate[2]); // Константа: Присваивания сегодняшнего года
 
             if (args[0].toLowerCase() == 'сегодня' || args[0].toLowerCase() == 'седня') // Проверка на ввода через через lower
             {
@@ -354,13 +354,13 @@ bot.event('message_new', async (ctx) => {
 
 async function SendReminderMessage()
 {
-    var date = new Date().toLocaleString("en-US", {timeZone: "Europe/Moscow"}); // Переменная для получения даты
-    date = new Date(date); // Переменная для получения даты
-    const iHour = date.getHours(); // Константа: Присваивания часа
-    const iMinute = date.getMinutes(); // Константа: Присваивания минут
-    const iMonth = date.getMonth() + 1; // Константа: Присваивания сегодняшнего месяца
-    const iDay = date.getDate(); // Константа: Присваивания сегодняшнего дня 
-    const iYear = date.getFullYear(); // Константа: Присваивания сегодняшнего года
+    const data = moment().zone("+03:00").format('D-M-YYYY-H-m'); // Получение даты
+    const setDate = data.split('-'); // Разделенеи через -
+    const iHour = parseInt(setDate[3]); // Константа: Присваивания часа
+    const iMinute = parseInt(setDate[4]); // Константа: Присваивания минут
+    const iMonth = parseInt(setDate[1]); // Константа: Присваивания сегодняшнего месяца
+    const iDay = parseInt(setDate[0]); // Константа: Присваивания сегодняшнего дня 
+    const iYear = parseInt(setDate[2]); // Константа: Присваивания сегодняшнего года
 
     let stringTime = `${iHour}:${iMinute}`; // Время в строке
     let stringDate = `${iDay}.${iMonth}.${iYear}` // Дата в строке
@@ -422,5 +422,4 @@ async function SendReminderMessage()
 // ===============[Запуск бота]==============
 bot.startPolling(); 
 // ===============[Запуск интервала проверки напоминания]==============
-//setInterval(SendReminderMessage, 30000)
-alert(moment().zone("+03:00").format('D-MYYYY-H-m'));
+setInterval(SendReminderMessage, 30000)
