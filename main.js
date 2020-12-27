@@ -91,7 +91,8 @@ bot.command('напоминания', async (ctx) => {
     {
         if (!await User.findOne({ID: ctx.message.from_id}).exec()) // Проверка регистрации
             await RegisterUser(ctx.message.from_id); // Регистрация пользователя
-
+        const user = await User.findOne({ID: ctx.message.from_id}).exec();
+        if (user.Flag > 0) return await ctx.reply('🤖 Извини, но я не дам тебе это сделать\nДоделай то что делал, а то сломаюсь(')
         let stringMessage = ''; // Текст для ввывод напоминаний
         let countFind = 0;
         let stringHour, stringMinute;
@@ -110,7 +111,7 @@ bot.command('напоминания', async (ctx) => {
             else
                 stringMinute = `${Number(splitTime[1])}`
 
-            stringMessage+=`#${reminder.ID} | ${reminder.Date} в ${stringHour}:${stringMinute}\n${reminder.Text}`; // Само сообщение
+            stringMessage+=`#${reminder.ID} | ${reminder.Date} в ${stringHour}:${stringMinute}\n${reminder.Text}\n\n`; // Само сообщение
             countFind++; 
         }
         await ctx.reply(`🤖 Созданно напоминаний: ${user.Numbers}\nНайденно напоминаний: ${countFind}\n\n${stringMessage}`); // Сообщение
@@ -123,6 +124,8 @@ bot.command('удалить', async (ctx) => {
         if (!await User.findOne({ID: ctx.message.from_id}).exec()) // Проверка регистрации
             await RegisterUser(ctx.message.from_id); // Регистрация пользователя
         
+        const user = await User.findOne({ID: ctx.message.from_id}).exec();
+        if (user.Flag > 0) return await ctx.reply('🤖 Извини, но я не дам тебе это сделать\nДоделай то что делал, а то сломаюсь(')
         const args = ctx.message.text.split(/ +/g);
         if(!args[1]) // Проверка на существование аргумента
             return await ctx.reply('🤖 Хмм.. ты не ввёл номер напоминания..') // сообщение и прекращение функции 
@@ -161,8 +164,9 @@ bot.event('message_new', async (ctx) => {
         if (user.Flag == 1) // Проверка на флаг = 1
         {
             await ctx.reply(`🤖 Так-с, текст твоего напоминания:\n${ctx.message.text}\n\n\
-                                Когда напомнить и во сколько?\n\
-                                Формат времени: день.месяц.год час:минуты\n\
+                                Хорошо, а когда напомнить и во сколько?\n\n\
+                                Формат времени, выглядит так:\b\
+                                день.месяц.год час:минуты\n\n\
                                 Пример: 31.12.2020 22:59\n\
                                 сегодня 12(запишеться в 12:00)`) 
             await User.findOneAndUpdate({ID: ctx.message.from_id},{ Flag: 2, Text: ctx.message.text }).exec(); // Поиск и обновление в базе пользователя, замена текста и флага
@@ -418,7 +422,7 @@ async function SendReminderMessage()
         }
         else await Reminder.deleteOne({UserID: reminder.UserID, ID: reminder.ID}).exec() // удаление напоминание
         const data = await api('users.get', {user_ids: reminder.UserID,access_token: token}); // Получение имени через модуль
-        await bot.sendMessage(reminder.UserID, `[id${ctx.message.from_id}|${data.response[0].first_name}], Напоминание #${reminder.ID}\n${reminder.Text}\n\n${messageRepeat}`); // Отправка сообщения
+        await bot.sendMessage(reminder.UserID, `[id${reminder.UserID}|${data.response[0].first_name}], Напоминание #${reminder.ID}\n${reminder.Text}\n\n${messageRepeat}`); // Отправка сообщения
     }
 }
 
