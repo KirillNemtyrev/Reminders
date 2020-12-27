@@ -9,4 +9,4 @@
 
 1. Язык: JavaScript
 2. Библиотеки: Node-Vk-Bot-Api, Mongoose, Moment
-3. Ссылка на бота: [тут]: https://vk.com/pineapple_reminder>
+3. Ссылка на бота: [`здеся`](https://vk.com/pineapple_reminder)
