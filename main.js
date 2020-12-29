@@ -221,7 +221,7 @@ bot.event('message_new', async (ctx) => {
                         }
                     }
                 }
-                else
+                else if(month == 2)
                 {
                     if(year % 4 == 0 && ( year % 100 != 0 || year % 400 == 0 )) // Проверка на високосный год
                     {
@@ -385,18 +385,24 @@ async function SendReminderMessage()
             oDay++; // Прибавление ко дню + 1
             
             // Проверка на месяц
-            if((oMonth == 1 || oMonth == 3 || oMonth == 5 || oMonth == 7 || oMonth == 8 || oMonth == 10 || oMonth == 12) && oDay > 31)
+            if(oMonth == 1 || oMonth == 3 || oMonth == 5 || oMonth == 7 || oMonth == 8 || oMonth == 10 || oMonth == 12)
             {
-                oMonth++; // Прибавление месяца
-                oDay = 1; // Сет на первый день
-                if(oMonth > 12) oMonth = 1; // Сет на январь
+                if(oDay > 31)
+                {
+                    oMonth++; // Прибавление месяца
+                    oDay = 1; // Сет на первый день
+                    if(oMonth > 12) oMonth = 1; // Сет на январь
+                }
             }
-            else if(((oMonth== 4 || oMonth == 6 || oMonth == 9 || oMonth == 11)) && oDay > 30)
+            else if(oMonth== 4 || oMonth == 6 || oMonth == 9 || oMonth == 11)
             {
-                oMonth++; // Прибавление месяца
-                oDay = 1; // Сет на первый день
+                if(oDay > 30)
+                {
+                    oMonth++; // Прибавление месяца
+                    oDay = 1; // Сет на первый день
+                }
             }
-            else 
+            else if(oMonth == 2)
             {
                 if(oYear % 4 == 0 && ( oYear % 100 != 0 || oYear % 400 == 0 )) // Проверка на високосный год
                 {
