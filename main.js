@@ -162,12 +162,7 @@ bot.event('message_new', async (ctx) => {
         const user = await User.findOne({ID: ctx.message.from_id}).exec(); // Создания констаты, поиск пользовтеля
         if (user.Flag == 1) // Проверка на флаг = 1
         {
-            await ctx.reply(`🤖 Так-с, текст твоего напоминания:\n${ctx.message.text}\n\n\
-            Хорошо, а когда напомнить и во сколько?\n\n\
-            Формат времени, выглядит так:\n\
-            день.месяц.год час:минуты\n\n\
-            Пример: 31.12.2020 22:59\n\
-            сегодня 12(запишеться в 12:00)`) 
+            await ctx.reply(`🤖 Так-с, текст твоего напоминания:\n${ctx.message.text}\n\nХорошо, а когда напомнить и во сколько?\n\nФормат времени, выглядит так:\nдень.месяц.год час:минуты\n\nПример: 31.12.2020 22:59\nсегодня 12(запишеться в 12:00)`) 
             await User.findOneAndUpdate({ID: ctx.message.from_id},{ Flag: 2, Text: ctx.message.text }).exec(); // Поиск и обновление в базе пользователя, замена текста и флага
         }
         else if (user.Flag == 2) // Проверка на флаг = 2
@@ -427,7 +422,7 @@ async function SendReminderMessage()
         }
         else await Reminder.deleteOne({UserID: reminder.UserID, ID: reminder.ID}).exec() // удаление напоминание
         const data = await api('users.get', {user_ids: reminder.UserID,access_token: token}); // Получение имени через модуль
-        await bot.sendMessage(reminder.UserID, `[id${reminder.UserID}|${data.response[0].first_name}], Напоминание #${reminder.ID}\n${reminder.Text}\n\n${messageRepeat}`); // Отправка сообщения
+        await bot.sendMessage(reminder.UserID, `[id${reminder.UserID}|${data.response[0].first_name}], Напоминание от ${reminder.Date} ${reminder.Time}\n${reminder.Text}\n\n${messageRepeat}`); // Отправка сообщения
     }
 }
 
