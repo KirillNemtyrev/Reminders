@@ -422,7 +422,7 @@ async function SendReminderMessage()
         }
         else await Reminder.deleteOne({UserID: reminder.UserID, ID: reminder.ID}).exec() // удаление напоминание
         const data = await api('users.get', {user_ids: reminder.UserID,access_token: token}); // Получение имени через модуль
-        await bot.sendMessage(reminder.UserID, `[id${reminder.UserID}|${data.response[0].first_name}], Напоминание от ${reminder.Date} ${reminder.Time}\n${reminder.Text}\n\n${messageRepeat}`); // Отправка сообщения
+        await bot.sendMessage(reminder.UserID, `[id${reminder.UserID}|${data.response[0].first_name}], спешу напомнить\nЧто у вас в данный момент:\n${reminder.Text}\n\n${messageRepeat}`); // Отправка сообщения
     }
 }
 
