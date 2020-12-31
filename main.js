@@ -386,7 +386,11 @@ async function SendReminderMessage()
                 {
                     oMonth++; // Прибавление месяца
                     oDay = 1; // Сет на первый день
-                    if(oMonth > 12) oMonth = 1; // Сет на январь
+                    if(oMonth > 12) 
+                    {
+                        oMonth = 1; // Сет на январь
+                        oYear++;
+                    }
                 }
             }
             else if(oMonth== 4 || oMonth == 6 || oMonth == 9 || oMonth == 11)
