@@ -98,7 +98,11 @@ bot.command('напомнить', async (ctx) => {
         if (!await User.findOne({ID: ctx.message.from_id}).exec()) // Проверка регистрации
             await RegisterUser(ctx.message.from_id); // Регистрация пользователя
 
-        await ctx.reply('🤖 Ну хорошо, напиши мне\nО чем тебе нужно напомнить?') 
+        await ctx.reply('🤖 Ну хорошо, напиши мне\nО чем тебе нужно напомнить?',null,Markup.keyboard([
+          [
+            Markup.button('Отмена', 'negative'),
+          ],
+        ]),); 
         await User.findOneAndUpdate({ID: ctx.message.from_id},{ Flag: 1 }).exec(); // Поиск и обновление в базе флага на 1
     }
 });
@@ -138,7 +142,7 @@ bot.command('напоминания', async (ctx) => {
             stringMessage+=`#${reminder.ID} | ${reminder.Date} в ${stringHour}:${stringMinute}\n${reminder.Text}\n\n`; // Само сообщение
             countFind++; 
         }
-        await ctx.reply(`🤖 Созданно напоминаний: ${user.Numbers}\nНайденно напоминаний: ${countFind}\n\n${stringMessage}`,Markup.keyboard([
+        await ctx.reply(`🤖 Созданно напоминаний: ${user.Numbers}\nНайденно напоминаний: ${countFind}\n\n${stringMessage}`,null,Markup.keyboard([
             [
               Markup.button('Напомнить', 'primary'),
               Markup.button('Напоминания', 'primary'),
