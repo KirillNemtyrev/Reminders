@@ -81,7 +81,7 @@ bot.command('команды', async (ctx) => {
     1️⃣ Напомнить - Создать напоминание\n\
     2️⃣ Напоминания - Список моих напоминаний\n\
     3️⃣ Удалить <номер> - Удалить своё напоминание\n\
-    4️⃣ Отмена - отменить все действия',Markup.keyboard([
+    4️⃣ Отмена - отменить все действия',null,Markup.keyboard([
         [
           Markup.button('Напомнить', 'primary'),
           Markup.button('Напоминания', 'primary'),
@@ -109,7 +109,7 @@ bot.command('напоминания', async (ctx) => {
         if (!await User.findOne({ID: ctx.message.from_id}).exec()) // Проверка регистрации
             await RegisterUser(ctx.message.from_id); // Регистрация пользователя
         const user = await User.findOne({ID: ctx.message.from_id}).exec();
-        if (user.Flag > 0) return await ctx.reply('🤖 Извини, но я не дам тебе это сделать\nДоделай то что делал, а то сломаюсь(',Markup.keyboard([
+        if (user.Flag > 0) return await ctx.reply('🤖 Извини, но я не дам тебе это сделать\nДоделай то что делал, а то сломаюсь(',null,Markup.keyboard([
             [
               Markup.button('Напомнить', 'primary'),
               Markup.button('Напоминания', 'primary'),
@@ -157,7 +157,7 @@ bot.command('удалить', async (ctx) => {
             await RegisterUser(ctx.message.from_id); // Регистрация пользователя
         
         const user = await User.findOne({ID: ctx.message.from_id}).exec();
-        if (user.Flag > 0) return await ctx.reply('🤖 Извини, но я не дам тебе это сделать\nДоделай то что делал, а то сломаюсь(',Markup.keyboard([
+        if (user.Flag > 0) return await ctx.reply('🤖 Извини, но я не дам тебе это сделать\nДоделай то что делал, а то сломаюсь(',null,Markup.keyboard([
             [
               Markup.button('Напомнить', 'primary'),
               Markup.button('Напоминания', 'primary'),
@@ -168,7 +168,7 @@ bot.command('удалить', async (ctx) => {
           ]),);
         const args = ctx.message.text.split(/ +/g);
         if(!args[1]) // Проверка на существование аргумента
-            return await ctx.reply('🤖 Хмм.. ты не ввёл номер напоминания..',Markup.keyboard([
+            return await ctx.reply('🤖 Хмм.. ты не ввёл номер напоминания..',null,Markup.keyboard([
                 [
                   Markup.button('Напомнить', 'primary'),
                   Markup.button('Напоминания', 'primary'),
@@ -191,7 +191,7 @@ bot.command('удалить', async (ctx) => {
                 ],
               ]),); // сообщение
         }
-        else await ctx.reply('🤖 Я не смог найти данное напоминание!',Markup.keyboard([
+        else await ctx.reply('🤖 Я не смог найти данное напоминание!',null,Markup.keyboard([
             [
               Markup.button('Напомнить', 'primary'),
               Markup.button('Напоминания', 'primary'),
@@ -213,7 +213,7 @@ bot.command('отмена', async (ctx) => {
         if (user.Flag > 0) // проверка на то что флаг больше 0
         {
             await User.findOneAndUpdate({ID: ctx.message.from_id},{ Flag: 0, Date: 'None', Time: 'None', Text: 'None' }).exec(); // Обновление аккаунта
-            await ctx.reply('🤖 Хорошо, хорошо, я все отменил)',Markup.keyboard([
+            await ctx.reply('🤖 Хорошо, хорошо, я все отменил)',null,Markup.keyboard([
                 [
                   Markup.button('Напомнить', 'primary'),
                   Markup.button('Напоминания', 'primary'),
@@ -223,7 +223,7 @@ bot.command('отмена', async (ctx) => {
                 ],
               ]),); // Сообщение
         }
-        else await ctx.reply('🤖 Хм... А что тебе нужно отменить?',Markup.keyboard([
+        else await ctx.reply('🤖 Хм... А что тебе нужно отменить?',null,Markup.keyboard([
             [
               Markup.button('Напомнить', 'primary'),
               Markup.button('Напоминания', 'primary'),
